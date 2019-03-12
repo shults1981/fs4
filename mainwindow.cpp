@@ -6,6 +6,7 @@
 
 #include "game.h"
 #include "unit.h"
+#include "menu.h"
 
 
 //=============================================================
@@ -88,18 +89,20 @@ MainWindow::MainWindow(QWidget *parent) :
     gameFild.border_y_max=50;
 
     GameController=new Game(gameFild,6,0);
+    timer=new QTimer;
+    scene=new QGraphicsScene();
 
-
-//    pole=GameController->getGameFild();
 
 
     ui->setupUi(this);
+    ui->_level->setText("0");
+    ui->_score->setText("0");
+    ui->_time->setText("0");
 
-    timer=new QTimer;
-    connect(timer, SIGNAL(timeout()), this, SLOT(_tic()));
     timer->start(TimeBase);
 
-
+    connect(timer, SIGNAL(timeout()), this, SLOT(_tic()));
+    connect(&M,SIGNAL(enterData(int)),this,SLOT(game_menu(int)));
 }
 
 MainWindow::~MainWindow()
@@ -113,6 +116,7 @@ void MainWindow::keyPressEvent(QKeyEvent *pe)
 
         if (pe->key()==Qt::Key_M){
             PST=game_stop;
+
         }
 
 
@@ -172,8 +176,8 @@ void    MainWindow::paintEvent(QPaintEvent *event)
 
     QString str_BUF1,str_BUF2,str_BUF3;
 
-    width=this->width();
-    height=this->height();
+    width=ui->MoveFild->width()-4;
+    height=ui->MoveFild->height()-4;
 
     X_max=width;
     Y_max=height;
@@ -186,14 +190,20 @@ void    MainWindow::paintEvent(QPaintEvent *event)
     hStep=static_cast<qreal>(scr_border_x_max-scr_border_x_min)/static_cast<qreal>(gameFild.border_x_max-gameFild.border_x_min);
     vStep=static_cast<qreal>(scr_border_y_max-scr_border_y_min)/static_cast<qreal>(gameFild.border_y_max-gameFild.border_y_min);
 
-    //---------- Make game fild ----------------------
-    painter.setPen(QPen(Qt::black,1,Qt::SolidLine));
-    painter.drawLine(QPointF(scr_border_x_min,scr_border_y_min),QPointF(scr_border_x_max+hStep,scr_border_y_min));
-    painter.drawLine(QPointF(scr_border_x_max+hStep,scr_border_y_min),QPointF(scr_border_x_max+hStep,scr_border_y_max+vStep));
-    painter.drawLine(QPointF(scr_border_x_max+hStep,scr_border_y_max+vStep),QPointF(scr_border_x_min,scr_border_y_max+vStep));
-    painter.drawLine(QPointF(scr_border_x_min,scr_border_y_max+vStep),QPointF(scr_border_x_min,scr_border_y_min));
-    painter.drawText(scr_border_x_min,scr_border_y_min-5, " Game SNAKE  ");
+    scene->setSceneRect(0,0,width,height);
 
+
+    //---------- Make game fild ----------------------
+
+
+//    painter.setPen(QPen(Qt::black,1,Qt::SolidLine));
+//    painter.drawLine(QPointF(scr_border_x_min,scr_border_y_min),QPointF(scr_border_x_max+hStep,scr_border_y_min));
+//    painter.drawLine(QPointF(scr_border_x_max+hStep,scr_border_y_min),QPointF(scr_border_x_max+hStep,scr_border_y_max+vStep));
+//    painter.drawLine(QPointF(scr_border_x_max+hStep,scr_border_y_max+vStep),QPointF(scr_border_x_min,scr_border_y_max+vStep));
+//    painter.drawLine(QPointF(scr_border_x_min,scr_border_y_max+vStep),QPointF(scr_border_x_min,scr_border_y_min));
+//    painter.drawText(scr_border_x_min,scr_border_y_min-5, " Game SNAKE  ");
+
+/*
 
     //  =====================================================
 
@@ -211,49 +221,57 @@ void    MainWindow::paintEvent(QPaintEvent *event)
             painter.drawText(scr_border_x_max/2-20,scr_border_y_max/2+30,"CONTINUE.....'c'");
             painter.drawText(scr_border_x_max/2-20,scr_border_y_max/2+40,"EXIT......'e'");
         }
-
+*/
 
         if (PST==game_on)
         {
-            painter.setBrush(QBrush(Qt::black,Qt::SolidPattern));
-            GameController->getRabbitPlace(pen);
-            painter.drawRect(static_cast<int>(scr_border_x_min+pen._x*hStep),
-                             static_cast<int>(scr_border_y_min+pen._y*vStep),
-                             static_cast<int>(hStep),
-                             static_cast<int>(vStep));
+
+//            painter.setBrush(QBrush(Qt::black,Qt::SolidPattern));
+//            GameController->getRabbitPlace(pen);
+//            painter.drawRect(static_cast<int>(scr_border_x_min+pen._x*hStep),
+//                             static_cast<int>(scr_border_y_min+pen._y*vStep),
+//                             static_cast<int>(hStep),
+//                             static_cast<int>(vStep));
 
 
 
-            for(i=0;i<GameController->getSnakeLen();i++ ){
-                GameController->getSnakeBodyPartsCords(i,pen);
-                painter.drawRect(static_cast<int>(scr_border_x_min+pen._x*hStep),
-                                 static_cast<int>(scr_border_y_min+pen._y*vStep),
-                                 static_cast<int>(hStep),
-                                 static_cast<int>(vStep));
-            }
+//            for(i=0;i<GameController->getSnakeLen();i++ ){
+//                GameController->getSnakeBodyPartsCords(i,pen);
+//                painter.drawRect(static_cast<int>(scr_border_x_min+pen._x*hStep),
+//                                 static_cast<int>(scr_border_y_min+pen._y*vStep),
+//                                 static_cast<int>(hStep),
+//                                 static_cast<int>(vStep));
+//            }
 
 //            //====  information ====
               str_BUF1=QString::number(GameController->getGameScore());
-              painter.drawText(scr_border_x_min,scr_border_y_max+15,"Score-");
-              painter.drawText(scr_border_x_min+35,scr_border_y_max+15,str_BUF1);
+              ui->_score->setText(str_BUF1);
+//              painter.drawText(scr_border_x_min,scr_border_y_max+15,"Score-");
+//              painter.drawText(scr_border_x_min+35,scr_border_y_max+15,str_BUF1);
 
               str_BUF2=QString::number(GameController->getGameLevel());
-              painter.drawText(scr_border_x_min,scr_border_y_max+25,"Level-");
-              painter.drawText(scr_border_x_min+35,scr_border_y_max+25,str_BUF2);
+              ui->_level->setText(str_BUF2);
+//              painter.drawText(scr_border_x_min,scr_border_y_max+25,"Level-");
+//              painter.drawText(scr_border_x_min+35,scr_border_y_max+25,str_BUF2);
 
               str_BUF3= QString::number((GTC.getGameTime().hour))+
                       QString(":")+
                       QString::number(GTC.getGameTime().min)+
                       QString(":")+
                       QString::number(GTC.getGameTime().sec);
-              painter.drawText(scr_border_x_min+100,scr_border_y_max+15,"Time-");
-              painter.drawText(scr_border_x_min+135,scr_border_y_max+15,str_BUF3);
-       }
-        if (PST==game_new_level)
-              painter.drawText(scr_border_x_max/2-30,scr_border_y_max/2-20,"N E X T    L E V E L !!!!!");
+              ui->_time->setText(str_BUF3);
+//              painter.drawText(scr_border_x_min+100,scr_border_y_max+15,"Time-");
+//              painter.drawText(scr_border_x_min+135,scr_border_y_max+15,str_BUF3);
 
-        if (PST==game_over)
-             painter.drawText(scr_border_x_max/2-30,scr_border_y_max/2-20,"G A M E   O V E R !!!!!");
+       }
+//        if (PST==game_new_level)
+//              painter.drawText(scr_border_x_max/2-30,scr_border_y_max/2-20,"N E X T    L E V E L !!!!!");
+
+//        if (PST==game_over)
+//             painter.drawText(scr_border_x_max/2-30,scr_border_y_max/2-20,"G A M E   O V E R !!!!!");
+
+        ui->MoveFild->setScene(scene);
+
 }
 
 void MainWindow::_tic()
@@ -290,6 +308,7 @@ bool    MainWindow::Main_Loop()
         case game_stop:
             GameController->setGameStatus(game_stop);
             delay_cnt=0;
+            M.show();
             break;
         case game_on:
 
@@ -341,6 +360,57 @@ bool    MainWindow::Main_Loop()
 //==============================================================
 
 
+void MainWindow::on_Button_Up_clicked()
+{
+    if (PST==game_on){
+            mvf=Up;
+            qDebug()<<"Pres Key_Up button";
+    }
+}
 
+void MainWindow::on_Button_Down_clicked()
+{
+    if (PST==game_on){
+           mvf=Down;
+           qDebug()<<"Pres Key_Down button";
+      }
+}
 
+void MainWindow::on_Button_Left_clicked()
+{
+    if (PST==game_on){
+            mvf=Left;
+            qDebug()<<"Pres Key_Left button";
+    }
+}
+
+void MainWindow::on_Button_Right_clicked()
+{
+    if (PST==game_on){
+             mvf=Right;
+            qDebug()<<"Pres Key_Right button";
+    }
+}
+
+void MainWindow::game_menu(int st)
+{
+    if (PST==game_stop||PST==game_over){
+        switch (st) {
+        case 0:
+            qDebug()<<"set EXIT";
+            PST=game_exit;
+            break;
+        case 1:
+            qDebug()<<"set NEW";
+            PST=game_new;
+            break;
+        case 2:
+            qDebug()<<"set CONTINUE";
+            PST=game_on;
+            break;
+        default:
+            break;
+        }
+    }
+}
 

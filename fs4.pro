@@ -27,12 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     unit.cpp \
-    game.cpp
+    game.cpp \
+    menu.cpp
 
 HEADERS += \
         mainwindow.h \
     unit.h \
-    game.h
+    game.h \
+    menu.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    menu.ui

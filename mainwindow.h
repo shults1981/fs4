@@ -6,9 +6,11 @@
 # include <QPaintEvent>
 #include <QTime>
 #include<QTimer>
+#include <QGraphicsScene>
 
 #include "game.h"
 #include "unit.h"
+#include"menu.h"
 
 //======================================================
 typedef struct _timedata_
@@ -49,6 +51,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    menu M;
 
 private:
 
@@ -66,6 +69,7 @@ private:
 
     GameStatus PST;
     QTimer *timer;
+    QGraphicsScene *scene;
 
 //    Fild pole;
 
@@ -77,6 +81,12 @@ private:
 
 private slots:
     void _tic();
+
+    void on_Button_Up_clicked();
+    void on_Button_Down_clicked();
+    void on_Button_Left_clicked();
+    void on_Button_Right_clicked();
+    void game_menu(int st);
 
 };
 
