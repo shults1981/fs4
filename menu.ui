@@ -9,9 +9,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
-    <height>159</height>
+    <width>160</width>
+    <height>160</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>160</width>
+    <height>160</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>160</width>
+    <height>160</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string notr="true">MENU</string>
@@ -22,7 +34,7 @@
   <widget class="QPushButton" name="new_g">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>20</x>
      <y>30</y>
      <width>121</width>
      <height>23</height>
@@ -35,7 +47,7 @@
   <widget class="QPushButton" name="continue_2">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>20</x>
      <y>60</y>
      <width>121</width>
      <height>23</height>
@@ -48,7 +60,7 @@
   <widget class="QPushButton" name="exit">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>20</x>
      <y>90</y>
      <width>121</width>
      <height>23</height>

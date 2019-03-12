@@ -175,6 +175,7 @@ void    MainWindow::paintEvent(QPaintEvent *event)
     qreal hStep,vStep;
 
     QString str_BUF1,str_BUF2,str_BUF3;
+    QPolygonF border;
 
     width=ui->MoveFild->width()-4;
     height=ui->MoveFild->height()-4;
@@ -195,6 +196,14 @@ void    MainWindow::paintEvent(QPaintEvent *event)
 
     //---------- Make game fild ----------------------
 
+
+    border<< QPointF (scr_border_x_min,scr_border_y_min);
+    border<<QPointF(scr_border_x_max+hStep,scr_border_y_min);
+    border<<QPointF(scr_border_x_max+hStep,scr_border_y_max+vStep);
+    border<<QPointF(scr_border_x_min,scr_border_y_max+vStep);
+    border<<QPointF(scr_border_x_min,scr_border_y_min);
+    scene->addPolygon(border);
+    scene->addText(" Game SNAKE  ");
 
 //    painter.setPen(QPen(Qt::black,1,Qt::SolidLine));
 //    painter.drawLine(QPointF(scr_border_x_min,scr_border_y_min),QPointF(scr_border_x_max+hStep,scr_border_y_min));
