@@ -39,7 +39,10 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Funny Snake 35</string>
+   <string>Funny Snake 4</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
@@ -158,9 +161,35 @@
          <number>0</number>
         </property>
         <item>
+         <widget class="QPushButton" name="menu">
+          <property name="text">
+           <string>MENU</string>
+          </property>
+          <property name="shortcut">
+           <string>M</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="Button_Left">
           <property name="text">
            <string>LEFT</string>
+          </property>
+          <property name="shortcut">
+           <string>Left</string>
           </property>
          </widget>
         </item>
@@ -174,12 +203,18 @@
             <property name="text">
              <string>UP</string>
             </property>
+            <property name="shortcut">
+             <string>Up</string>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="Button_Down">
             <property name="text">
              <string>DOWN</string>
+            </property>
+            <property name="shortcut">
+             <string>Down</string>
             </property>
            </widget>
           </item>
@@ -195,6 +230,9 @@
           </property>
           <property name="text">
            <string>RIGHT</string>
+          </property>
+          <property name="shortcut">
+           <string>Right</string>
           </property>
          </widget>
         </item>

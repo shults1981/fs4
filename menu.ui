@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>menu</class>
  <widget class="QDialog" name="menu">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -12,6 +15,12 @@
     <width>160</width>
     <height>160</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
@@ -25,8 +34,11 @@
     <height>160</height>
    </size>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
   <property name="windowTitle">
-   <string notr="true">MENU</string>
+   <string>MENU</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -40,8 +52,14 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <property name="text">
     <string>NEW</string>
+   </property>
+   <property name="shortcut">
+    <string>N</string>
    </property>
   </widget>
   <widget class="QPushButton" name="continue_2">
@@ -53,8 +71,14 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <property name="text">
     <string>CONTINUE</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
    </property>
   </widget>
   <widget class="QPushButton" name="exit">
@@ -66,8 +90,14 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <property name="text">
     <string>EXIT</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
    </property>
   </widget>
  </widget>

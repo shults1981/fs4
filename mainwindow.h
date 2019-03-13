@@ -51,7 +51,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    menu M;
+
 
 private:
 
@@ -75,19 +75,21 @@ private:
 
 
     Ui::MainWindow *ui;
+    menu *m;
+
     void    keyPressEvent (QKeyEvent* pe);
     void    paintEvent(QPaintEvent *event);
     bool    Main_Loop();
 
 private slots:
     void _tic();
-
     void on_Button_Up_clicked();
     void on_Button_Down_clicked();
     void on_Button_Left_clicked();
     void on_Button_Right_clicked();
     void game_menu(int st);
 
+    void on_menu_clicked();
 };
 
 //==============================================================
