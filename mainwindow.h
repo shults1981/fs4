@@ -77,7 +77,7 @@ private:
     Ui::MainWindow *ui;
     menu *m;
 
-    void    keyPressEvent (QKeyEvent* pe);
+//    void    keyPressEvent (QKeyEvent* pe);
     void    paintEvent(QPaintEvent *event);
     bool    Main_Loop();
 

@@ -91,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m=new menu(this);
 
+
     GameController=new Game(gameFild,6,0);
     timer=new QTimer;
     scene=new QGraphicsScene();
@@ -98,8 +99,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     ui->setupUi(this);
+
+    m->setMinimumHeight(this->height());
+    m->setMinimumWidth(this->width());
+    m->setMaximumHeight(this->height());
+    m->setMaximumWidth(this->width());
+    m->setWindowFlag(Qt::CustomizeWindowHint);
     m->setModal(true);
-    ui->menu->setVisible(false);
+    ui->menu->setEnabled(false);
+  //  ui->menu->setVisible(false);
 
 
     ui->_level->setText("0");
@@ -121,60 +129,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *pe)
-{
-        if (pe->key()==Qt::Key_M){
-            PST=game_stop;
+//void MainWindow::keyPressEvent(QKeyEvent *pe)
+//{
+//    Q_UNUSED(pe);
 
-        }
-
-//        if (PST==game_stop||PST==game_over){
-//            switch (pe->key())  {
-//                case Qt::Key_E:
-//                    PST=game_exit;
-//                    break;
-//                case Qt::Key_N:
-//                    PST=game_new;
-//                    break;
-//                case Qt::Key_C:
-//                    PST=game_on;
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-
-//        if (PST==game_on){
-//            switch ( pe->key()){
-//            case Qt::Key_Left:
-//                mvf=Left;
-//                qDebug()<<"Pres Key_Left button";
-//                break;
-//            case Qt::Key_Right:
-//                mvf=Right;
-//                qDebug()<<"Pres Key_Right button";
-//                break;
-//            case Qt::Key_Up:
-//                mvf=Up;
-//                qDebug()<<"Pres Key_Up button";
-//                break;
-//            case Qt::Key_Down:
-//                mvf=Down;
-//                qDebug()<<"Pres Key_Down button";
-//                break;
-//            default:
-//                break;
-//            }
-//        }
-
-}
+//}
 
 
 void    MainWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-    QPainter painter(this);
+//    QPainter painter(this);
     Point pen;
     int width, height;
 
@@ -223,7 +189,7 @@ void    MainWindow::paintEvent(QPaintEvent *event)
                                                  static_cast<int>(scr_border_y_min+pen._y*vStep),
                                                  static_cast<int>(hStep),
                                                  static_cast<int>(vStep));
-            scene->addRect(r,QPen(Qt::black),QBrush(Qt::red));
+            scene->addRect(r,QPen(Qt::black),QBrush(Qt::yellow));
 
 
 
@@ -234,7 +200,7 @@ void    MainWindow::paintEvent(QPaintEvent *event)
                          static_cast<int>(scr_border_y_min+pen._y*vStep),
                          static_cast<int>(hStep),
                          static_cast<int>(vStep));
-                scene->addRect(r,QPen(Qt::black),QBrush(Qt::red));
+                scene->addRect(r,QPen(Qt::black),QBrush(Qt::green));
 
 
             }
@@ -302,14 +268,16 @@ bool    MainWindow::Main_Loop()
         case game_stop:
             GameController->setGameStatus(game_stop);
             delay_cnt=0;
-            ui->menu->setVisible(false);
+            ui->menu->setEnabled(false);
+            //ui->menu->setVisible(false);
             m->show();
             break;
         case game_on:
 
             if(GameController->getGameStatus()!=game_over){
                 GameController->setGameStatus(game_on);
-                    ui->menu->setVisible(true);
+                    ui->menu->setEnabled(true);
+                    //ui->menu->setVisible(true);
             }
             if(GameController->getGameStatus()==game_over)
                 PST=game_over;
@@ -348,7 +316,7 @@ bool    MainWindow::Main_Loop()
             }
         }
 
-        qDebug()<<"Prg. tic. PST-"<<PST;
+//        qDebug()<<"Prg. tic. PST-"<<PST;
 
         return true;
 }
@@ -364,7 +332,7 @@ void MainWindow::on_Button_Up_clicked()
 {
     if (PST==game_on){
             mvf=Up;
-            qDebug()<<"Pres Key_Up button";
+//            qDebug()<<"Pres Key_Up button";
     }
 }
 
@@ -372,7 +340,7 @@ void MainWindow::on_Button_Down_clicked()
 {
     if (PST==game_on){
            mvf=Down;
-           qDebug()<<"Pres Key_Down button";
+//           qDebug()<<"Pres Key_Down button";
       }
 }
 
@@ -380,7 +348,7 @@ void MainWindow::on_Button_Left_clicked()
 {
     if (PST==game_on){
             mvf=Left;
-            qDebug()<<"Pres Key_Left button";
+//            qDebug()<<"Pres Key_Left button";
     }
 }
 
@@ -388,7 +356,7 @@ void MainWindow::on_Button_Right_clicked()
 {
     if (PST==game_on){
              mvf=Right;
-            qDebug()<<"Pres Key_Right button";
+//            qDebug()<<"Pres Key_Right button";
     }
 }
 
@@ -397,15 +365,15 @@ void MainWindow::game_menu(int st)
     if (PST==game_stop||PST==game_over){
         switch (st) {
         case 0:
-            qDebug()<<"set EXIT";
+//            qDebug()<<"set EXIT";
             PST=game_exit;
             break;
         case 1:
-            qDebug()<<"set NEW";
+//            qDebug()<<"set NEW";
             PST=game_new;
             break;
         case 2:
-            qDebug()<<"set CONTINUE";
+//            qDebug()<<"set CONTINUE";
             PST=game_on;
             break;
         default:
