@@ -77,8 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 
 {
-    PST=game_stop;
 
+    PST=game_stop;
     TimeBase=200;
     LevelTimeStep=20;
     GamePause=5;
@@ -89,17 +89,36 @@ MainWindow::MainWindow(QWidget *parent) :
     gameFild.border_y_min=0;
     gameFild.border_y_max=50;
 
-    m=new menu(this);
+    //
+    sx=0;
+    sx_=0;
+    sy=0;
+    sy_=0;
+    sz=0;
+    sz_=0;
 
+    flag_vrt=false;
+    flag_hor=false;
+
+    //counters
+    cnt1=0;
+    cnt2=0;
+
+
+    m=new menu(this);
+    s=QApplication::primaryScreen();
 
     GameController=new Game(gameFild,6,0);
-    timer=new QTimer;
+    timer=new QTimer(this);
     scene=new QGraphicsScene();
+
+    tmr1=new QTimer(this);
+    pRs=new QRotationSensor(this);
+
 
 
 
     ui->setupUi(this);
-
     m->setMinimumHeight(this->height());
     m->setMinimumWidth(this->width());
     m->setMaximumHeight(this->height());
@@ -107,40 +126,59 @@ MainWindow::MainWindow(QWidget *parent) :
     m->setWindowFlag(Qt::CustomizeWindowHint);
     m->setModal(true);
     ui->menu->setEnabled(false);
-  //  ui->menu->setVisible(false);
+    s->setOrientationUpdateMask(
+               Qt::PortraitOrientation
+               | Qt::LandscapeOrientation
+               | Qt::InvertedPortraitOrientation
+               | Qt::InvertedLandscapeOrientation);
+    scrOrient=s->orientation();
 
+
+
+  //  ui->menu->setVisible(false);
 
     ui->_level->setText("0");
     ui->_score->setText("0");
-    ui->_time->setText("0:0:0");
+    ui->_time->setText("00:00:00");
 
 
 
+
+    // Start timers and sensor
     timer->start(TimeBase);
+    tmr1->start(100);
+    pRs->start();
+
+
+
 
     connect(timer, SIGNAL(timeout()), this, SLOT(_tic()));
     connect(m,SIGNAL(enterData(int)),this,SLOT(game_menu(int)));
+    connect(tmr1,SIGNAL(timeout()),this,SLOT(RotUpdateData()));
+    connect(s,SIGNAL(orientationChanged(Qt::ScreenOrientation)),
+            this,
+            SLOT(ScrOrientationChanged(Qt::ScreenOrientation)));
+
 }
 
 MainWindow::~MainWindow()
 {
+    timer->stop();
+    tmr1->stop();
+    pRs->stop();
+
+
     delete GameController;
 
     delete ui;
 }
-
-//void MainWindow::keyPressEvent(QKeyEvent *pe)
-//{
-//    Q_UNUSED(pe);
-
-//}
 
 
 void    MainWindow::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
 
-//    QPainter painter(this);
+
     Point pen;
     int width, height;
 
@@ -381,3 +419,167 @@ void MainWindow::game_menu(int st)
         }
     }
 }
+
+void MainWindow::RotUpdateData()
+{
+
+    qreal _rx, _ry,_rz;
+
+    // set value S[i-1]
+    sx_=sx;
+    sy_=sy;
+    sz_=sz;
+
+    // read value S[i]
+    sx=_rx=pRs->reading()->x();
+    sy=_ry=pRs->reading()->y();
+    sz=_rz=pRs->reading()->z();
+
+    // calc delta= S[i]-S[i-1]
+    dx=sx-sx_;
+    dy=sy-sy_;
+    dz=sz-sz_;
+
+    // output
+
+    // ---
+    if (scrOrient==Qt::PortraitOrientation){
+        if(!flag_vrt){
+            if (dx>0 && qAbs(dx)>5){
+//              ("--DOWN--");
+                flag_vrt=true;
+                    if (PST==game_on){
+                         mvf=Down;
+                    }
+            }
+            if (dx<0 && qAbs(dx)>5){
+//              ("---UP---");
+                if (PST==game_on){
+                     mvf=Up;
+                }
+                flag_vrt=true;
+            }
+        }
+        else {
+            cnt1++;
+            if (cnt1>=4){
+                cnt1=0;
+                flag_vrt=false;
+            }
+
+        }
+
+        if (!flag_hor) {
+            if (dy>0 && qAbs(dy)>5){
+//              ("--RIGHT--");
+                if (PST==game_on){
+                     mvf=Right;
+                }
+                flag_hor=true;
+            }
+            if (dy<0 && qAbs(dy)>5){
+//              ("---LEFT---");
+                if (PST==game_on){
+                     mvf=Left;
+                }
+                flag_hor=true;
+            }
+        }
+        else {
+            cnt2++;
+            if (cnt2>=4){
+                cnt2=0;
+                flag_hor=false;
+            }
+
+        }
+    }
+
+    if (scrOrient==Qt::LandscapeOrientation){
+        if(!flag_vrt){
+            if (dy>0 && qAbs(dy)>3){
+ //              ("---UP---");
+                flag_vrt=true;
+            }
+            if (dy<0 && qAbs(dy)>3){
+//              ("--DOWN--");
+                flag_vrt=true;
+            }
+        }
+        else {
+            cnt1++;
+            if (cnt1>=4){
+                cnt1=0;
+                flag_vrt=false;
+            }
+
+        }
+
+        if (!flag_hor) {
+            if (dx>0 && qAbs(dx)>3){
+//              ("--RIGHT--");
+                flag_hor=true;
+            }
+            if (dx<0 && qAbs(dx)>3){
+//              ("---LEFT---");
+                flag_hor=true;
+            }
+        }
+        else {
+            cnt2++;
+            if (cnt2>=4){
+                cnt2=0;
+                flag_hor=false;
+            }
+
+        }
+    }
+
+    if (scrOrient==Qt::InvertedLandscapeOrientation){
+        if(!flag_vrt){
+            if (dy>0 && qAbs(dy)>3){
+//              ("--DOWN--");
+                flag_vrt=true;
+            }
+            if (dy<0 && qAbs(dy)>3){
+//              ("---UP---");
+                flag_vrt=true;
+            }
+        }
+        else {
+            cnt1++;
+            if (cnt1>=4){
+                cnt1=0;
+                flag_vrt=false;
+            }
+
+        }
+
+        if (!flag_hor) {
+            if (dx>0 && qAbs(dx)>3){
+//              ("---LEFT---");
+                flag_hor=true;
+            }
+            if (dx<0 && qAbs(dx)>3){
+ //          ("--RIGHT--");
+                flag_hor=true;
+            }
+        }
+        else {
+            cnt2++;
+            if (cnt2>=4){
+                cnt2=0;
+                flag_hor=false;
+            }
+
+        }
+    }
+
+}
+
+void MainWindow::ScrOrientationChanged(Qt::ScreenOrientation orientation)
+{
+    scrOrient= orientation;
+}
+
+

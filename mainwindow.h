@@ -8,6 +8,11 @@
 #include<QTimer>
 #include <QGraphicsScene>
 
+#include <QOrientationSensor>
+#include<QRotationSensor>
+#include <QScreen>
+
+
 #include "game.h"
 #include "unit.h"
 #include"menu.h"
@@ -71,13 +76,29 @@ private:
     QTimer *timer;
     QGraphicsScene *scene;
 
-//    Fild pole;
-
-
     Ui::MainWindow *ui;
     menu *m;
 
-//    void    keyPressEvent (QKeyEvent* pe);
+    //++++++++++++++++++++++++++++++++++++++++++++++
+    qreal sx,sx_,sy,sy_,sz,sz_;
+    qreal dx, dy, dz;
+    quint8 cnt1,cnt2;
+
+    bool flag_vrt;
+    bool flag_hor;
+
+    Qt::ScreenOrientation scrOrient;
+
+    QScreen *s;
+
+    QTimer *tmr1,*tmr2;
+    QRotationSensor *pRs;
+
+
+    //+++++++++++++++++++++++++++++++++++++++++++++
+
+
+
     void    paintEvent(QPaintEvent *event);
     bool    Main_Loop();
 
@@ -90,6 +111,10 @@ private slots:
     void game_menu(int st);
 
     void on_menu_clicked();
+public slots:
+    void RotUpdateData();
+    void ScrOrientationChanged (Qt::ScreenOrientation orientation);
+
 };
 
 //==============================================================
