@@ -79,8 +79,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     PST=game_stop;
-    TimeBase=200;
-    LevelTimeStep=20;
+    TimeBase=250;
+    LevelTimeStep=15;
     GamePause=5;
     delay_cnt=0;
 
@@ -130,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
                Qt::PortraitOrientation
                | Qt::LandscapeOrientation
                | Qt::InvertedPortraitOrientation
-               | Qt::InvertedLandscapeOrientation);
+               | Qt::InvertedLandscapeOrientation );
     scrOrient=s->orientation();
 
 
@@ -443,19 +443,21 @@ void MainWindow::RotUpdateData()
     // output
 
     // ---
+
+
     if (scrOrient==Qt::PortraitOrientation){
         if(!flag_vrt){
             if (dx>0 && qAbs(dx)>5){
-//              ("--DOWN--");
+//              ("--UP--");
                 flag_vrt=true;
                     if (PST==game_on){
-                         mvf=Down;
+                         mvf=Up;
                     }
             }
             if (dx<0 && qAbs(dx)>5){
-//              ("---UP---");
+//              ("---DOWN---");
                 if (PST==game_on){
-                     mvf=Up;
+                     mvf=Down;
                 }
                 flag_vrt=true;
             }
@@ -471,16 +473,16 @@ void MainWindow::RotUpdateData()
 
         if (!flag_hor) {
             if (dy>0 && qAbs(dy)>5){
-//              ("--RIGHT--");
+//              ("--LEFT--");
                 if (PST==game_on){
-                     mvf=Right;
+                     mvf=Left;
                 }
                 flag_hor=true;
             }
             if (dy<0 && qAbs(dy)>5){
-//              ("---LEFT---");
+//              ("---RIGHT---");
                 if (PST==game_on){
-                     mvf=Left;
+                     mvf=Right;
                 }
                 flag_hor=true;
             }
@@ -498,12 +500,18 @@ void MainWindow::RotUpdateData()
     if (scrOrient==Qt::LandscapeOrientation){
         if(!flag_vrt){
             if (dy>0 && qAbs(dy)>3){
- //              ("---UP---");
+ //              ("---DOWN---");
                 flag_vrt=true;
+                if (PST==game_on){
+                     mvf=Down;
+                }
             }
             if (dy<0 && qAbs(dy)>3){
-//              ("--DOWN--");
+//              ("--UP--");
                 flag_vrt=true;
+                if (PST==game_on){
+                     mvf=Up;
+                }
             }
         }
         else {
@@ -517,11 +525,17 @@ void MainWindow::RotUpdateData()
 
         if (!flag_hor) {
             if (dx>0 && qAbs(dx)>3){
-//              ("--RIGHT--");
+//              ("--LEFT--");
                 flag_hor=true;
+                if (PST==game_on){
+                     mvf=Left;
+                }
             }
             if (dx<0 && qAbs(dx)>3){
-//              ("---LEFT---");
+//              ("---RIGHT---");
+                if (PST==game_on){
+                     mvf=Right;
+                }
                 flag_hor=true;
             }
         }
@@ -538,12 +552,18 @@ void MainWindow::RotUpdateData()
     if (scrOrient==Qt::InvertedLandscapeOrientation){
         if(!flag_vrt){
             if (dy>0 && qAbs(dy)>3){
-//              ("--DOWN--");
+//              ("--UP--");
                 flag_vrt=true;
+                if (PST==game_on){
+                     mvf=Up;
+                }
             }
             if (dy<0 && qAbs(dy)>3){
-//              ("---UP---");
+//              ("---DOWN---");
                 flag_vrt=true;
+                if (PST==game_on){
+                     mvf=Down;
+                }
             }
         }
         else {
@@ -557,12 +577,18 @@ void MainWindow::RotUpdateData()
 
         if (!flag_hor) {
             if (dx>0 && qAbs(dx)>3){
-//              ("---LEFT---");
+//              ("---RIGHT---");
                 flag_hor=true;
+                if (PST==game_on){
+                     mvf=Right;
+                }
             }
             if (dx<0 && qAbs(dx)>3){
- //          ("--RIGHT--");
+ //          ("--LEFT--");
                 flag_hor=true;
+                if (PST==game_on){
+                     mvf=Left;
+                }
             }
         }
         else {
